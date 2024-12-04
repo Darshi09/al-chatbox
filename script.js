@@ -1,4 +1,5 @@
 let prompt = document.querySelector("#prompt");
+let submit = document.querySelector("#submit");
 let chatContainer = document.querySelector(".chat-container");
 let imagebtn = document.querySelector("#image");
 let image = document.querySelector("#image img");
@@ -43,6 +44,7 @@ async function generateResponse(aiChatbox){
         chatContainer.scrollTo({top:chatContainer.scrollHeight,behavior:"smooth"})
         image.src = `image/img.png`
         image.classList.remove("choose")
+        user.file={}
     }
 
     
@@ -57,7 +59,7 @@ function createChatbox(html,classes){
 
 function handlechatResponse(mes){
     user.message = mes; 
-    let html = ` <img src="image/person.png" alt="" id="userimage" width="50">
+    let html = ` <img src="image/person.png" alt="" id="userimage" width="10%">
     <div class="user-chatarea">
         ${user.message} 
         ${user.file.data?`<img src="data:${user.file.mine_type};base64,${user.file.data}" class="chooseimg" />`: ""}
@@ -68,9 +70,9 @@ function handlechatResponse(mes){
     chatContainer.scrollTo({top:chatContainer.scrollHeight,behavior:"smooth"})
      
     setTimeout(() => {
-        let html = `<img src="image/ai.png" alt="" id="aiimage" width="50">
+        let html = `<img src="image/ai.png" alt="" id="aiimage" width="10%">
         <div class="ai-chatarea"> 
-        <img src="loading.gif" alt="" class="load" width="60px">
+        <img src="loading.gif" alt="" class="load" width="80px">
         </div>`
         let aiChatbox = createChatbox(html,"ai-chatbox")
         chatContainer.appendChild(aiChatbox)
@@ -80,9 +82,12 @@ function handlechatResponse(mes){
 
 prompt.addEventListener("keydown",(e)=>{
     if(e.key=="Enter"){
-        handlechatResponse(prompt.value);
-        
+        handlechatResponse(prompt.value); 
     } 
+})
+
+submit.addEventListener("click",()=>{
+    handlechatResponse(prompt.value);
 })
 
 imageInput.addEventListener("change",()=>{

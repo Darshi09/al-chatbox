@@ -42,7 +42,7 @@ body{
 }
 .chooseimg{
     width: 30%;
-    border-radius: 30px;
+    border-radius: 10px;
 }
 .ai-chatarea{
     width: 90%;
@@ -110,4 +110,13 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+@media (max-width:600px){
+    .user-chatbox{
+        width: 80%;
+        left: 20%;
+    }
+    .ai-chatbox{
+        width: 80%;
+    }
 }
