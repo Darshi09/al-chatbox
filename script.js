@@ -1,6 +1,7 @@
 let prompt = document.querySelector("#prompt");
 let chatContainer = document.querySelector(".chat-container");
 let imagebtn = document.querySelector("#image");
+let image = document.querySelector("#image img");
 let imageInput = document.querySelector("#image input");
 
 const api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAR_A8f5r-W8AB5K29QEJw8ESxJcTSo_Fo"
@@ -40,6 +41,8 @@ async function generateResponse(aiChatbox){
     }
     finally{
         chatContainer.scrollTo({top:chatContainer.scrollHeight,behavior:"smooth"})
+        image.src = `image/img.png`
+        image.classList.remove("choose")
     }
 
     
@@ -57,6 +60,7 @@ function handlechatResponse(mes){
     let html = ` <img src="image/person.png" alt="" id="userimage" width="50">
     <div class="user-chatarea">
         ${user.message} 
+        ${user.file.data?`<img src="data:${user.file.mine_type};base64,${user.file.data}" class="chooseimg" />`: ""}
     </div>`
     prompt.value=""
     let userchatbox = createChatbox(html,"user-chatbox");
@@ -91,7 +95,10 @@ imageInput.addEventListener("change",()=>{
             mime_type: file.type,
             data : base64String
         }
+        image.src = `data:${user.file.mine_type};base64,${user.file.data}`
+        image.classList.add("choose")
     }
+    
     reader.readAsDataURL(file)
 })
 
