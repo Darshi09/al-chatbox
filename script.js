@@ -1,9 +1,16 @@
 let prompt = document.querySelector("#prompt");
 let chatContainer = document.querySelector(".chat-container");
+let imagebtn = document.querySelector("#image");
+let imageInput = document.querySelector("#image input");
+
 const api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAR_A8f5r-W8AB5K29QEJw8ESxJcTSo_Fo"
+
 let user = {
-    data:null,
-    
+    message:null,
+    file:{
+        mime_type: null,
+        data: null
+    }
 }
 async function generateResponse(aiChatbox){
     
@@ -15,7 +22,8 @@ async function generateResponse(aiChatbox){
             contents: [
                 {
                     parts: [
-                        { text: user.data } // Correctly reference the variable
+                        { text: user.message } , (user.file.data?[{"inline_data":user.file}]:[])
+
                     ]
                 }
             ]
@@ -45,10 +53,10 @@ function createChatbox(html,classes){
 }
 
 function handlechatResponse(mes){
-    user.data = mes; 
+    user.message = mes; 
     let html = ` <img src="image/person.png" alt="" id="userimage" width="50">
     <div class="user-chatarea">
-        ${user.data} 
+        ${user.message} 
     </div>`
     prompt.value=""
     let userchatbox = createChatbox(html,"user-chatbox");
@@ -70,7 +78,23 @@ prompt.addEventListener("keydown",(e)=>{
     if(e.key=="Enter"){
         handlechatResponse(prompt.value);
         
+    } 
+})
+
+imageInput.addEventListener("change",()=>{
+    const file = imageInput.files[0]
+    if(!file) return
+    let reader = new FileReader();
+    reader.onload=(e)=>{
+        let base64String = e.target.result.split(",")[1]
+        user.file={
+            mime_type: file.type,
+            data : base64String
+        }
     }
-    
-    
+    reader.readAsDataURL(file)
+})
+
+imagebtn.addEventListener("click",()=>{
+    imagebtn.querySelector("input").click()
 })
